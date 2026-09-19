@@ -190,16 +190,16 @@ class _TitleBar extends StatelessWidget {
   }
 
   void _showHelp(BuildContext context) {
-    showModalBottomSheet<void>(
+    showDialog<void>(
       context: context,
-      builder: (BuildContext sheetContext) => const _HelpSheet(),
+      builder: (BuildContext dialogContext) => const _HelpDialog(),
     );
   }
 }
 
 /// Offline help describing the GATE interaction model.
-class _HelpSheet extends StatelessWidget {
-  const _HelpSheet();
+class _HelpDialog extends StatelessWidget {
+  const _HelpDialog();
 
   static const List<(String, String)> _facts = <(String, String)>[
     ('Functions apply after the number',
@@ -226,29 +226,55 @@ class _HelpSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
+    return Dialog(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 420, maxHeight: 520),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              'How this calculator works',
-              style: Theme.of(context).textTheme.titleMedium,
+            // Header
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    'How this calculator works',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.of(context).pop(),
+                    tooltip: 'Close',
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 12),
-            for (final (String title, String body) in _facts) ...<Widget>[
-              Text(title, style: Theme.of(context).textTheme.titleSmall),
-              const SizedBox(height: 2),
-              Text(body, style: Theme.of(context).textTheme.bodyMedium),
-              const SizedBox(height: 10),
-            ],
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Close'),
+            const Divider(height: 1),
+            // Scrollable middle
+            Flexible(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                children: <Widget>[
+                  for (final (String title, String body) in _facts) ...<Widget>[
+                    Text(title, style: Theme.of(context).textTheme.titleSmall),
+                    const SizedBox(height: 2),
+                    Text(body, style: Theme.of(context).textTheme.bodyMedium),
+                    const SizedBox(height: 10),
+                  ],
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+            // Footer
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Close'),
+                ),
               ),
             ),
           ],
