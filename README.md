@@ -1,5 +1,7 @@
 # GATE Virtual Calculator
 
+![GATE Virtual Calculator app preview](assets/branding/readme-hero.png)
+
 A cross-platform Flutter reproduction of the GATE examination virtual
 calculator, built from a single Flutter/Dart codebase for Web, Android and iOS.
 
