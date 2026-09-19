@@ -23,10 +23,16 @@ import 'operator_key.dart';
 ///
 /// Every key dispatches a [CalculatorAction]; no calculation happens here.
 class CalculatorKeypad extends StatelessWidget {
-  const CalculatorKeypad({required this.width, required this.onAction, super.key});
+  const CalculatorKeypad({
+    required this.width,
+    required this.angleMode,
+    required this.onAction,
+    super.key,
+  });
 
   /// Width available to the keypad; the grid scales proportionally with it.
   final double width;
+  final AngleMode angleMode;
 
   final void Function(CalculatorAction action) onAction;
 
@@ -46,7 +52,9 @@ class CalculatorKeypad extends StatelessWidget {
                 top: _top(cell, metrics),
                 width: _width(cell, metrics),
                 height: _heightOf(cell, metrics),
-                child: cell.builder(context, onAction, metrics),
+                child: (cell.column == 1 && cell.row == 0
+                        ? _angleModeSelector(angleMode)
+                        : cell.builder)(context, onAction, metrics),
               ),
           ],
         ),
@@ -55,7 +63,8 @@ class CalculatorKeypad extends StatelessWidget {
   }
 
   double _totalHeight(CalculatorMetrics metrics) =>
-      metrics.modeRowHeight + 5 * (metrics.rowHeight + metrics.gap);
+      metrics.modeRowHeight + metrics.gap +
+      5 * (metrics.rowHeight + metrics.gap);
 
   double _left(_Cell cell, CalculatorMetrics metrics) =>
       metrics.gap / 2 + cell.column * metrics.pitch;
@@ -66,6 +75,7 @@ class CalculatorKeypad extends StatelessWidget {
   double _top(_Cell cell, CalculatorMetrics metrics) => cell.row == 0
       ? 0
       : metrics.modeRowHeight +
+          metrics.gap +
           (cell.row - 1) * (metrics.rowHeight + metrics.gap);
 
   double _heightOf(_Cell cell, CalculatorMetrics metrics) => cell.row == 0
@@ -183,11 +193,13 @@ _KeyBuilder _angleModeSelector(AngleMode mode) =>
       CalculatorMetrics metrics,
     ) {
       return Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          SizedBox(width: metrics.pitch * 0.25),
           for (final AngleMode candidate in AngleMode.values) ...<Widget>[
             if (candidate != AngleMode.values.first)
-              SizedBox(width: metrics.keyFontSize * 1.4),
+              SizedBox(width: metrics.keyFontSize * 0.8),
             _ModeRadio(
               mode: candidate,
               selected: candidate == mode,
@@ -256,7 +268,7 @@ class _ModeRadio extends StatelessWidget {
               Text(
                 mode.label,
                 style: TextStyle(
-                  fontSize: metrics.keyFontSize,
+                  fontSize: metrics.keyFontSize * 0.8,
                   color: CalculatorColors.keyText,
                 ),
               ),

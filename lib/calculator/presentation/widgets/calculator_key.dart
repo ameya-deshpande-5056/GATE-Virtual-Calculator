@@ -45,40 +45,42 @@ class CalculatorKey extends StatelessWidget {
       child: Opacity(
         opacity: enabled ? 1 : 0.55,
         child: Material(
-          color: face,
+          color: Colors.transparent,
           shape: _KeyBorder(),
           child: InkWell(
             onTap: enabled ? onPressed : null,
             customBorder: _KeyBorder(),
             child: Ink(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
+                color: face,
+                borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: CalculatorColors.keyBorder),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: <Color>[
-                    CalculatorColors.keyHighlight,
-                    Colors.transparent,
-                  ],
-                  stops: const <double>[0.25, 0.25],
-                ),
+                boxShadow: const <BoxShadow>[
+                  BoxShadow(
+                    color: CalculatorColors.keyShadow,
+                    offset: Offset(0, 5),
+                    blurRadius: 0,
+                  ),
+                ],
               ),
               child: Center(
-                child: DefaultTextStyle(
-                  style: TextStyle(
-                    fontSize: metrics.keyFontSize,
-                    height: 1.0,
-                    color: foreground,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.2,
-                  ),
-                  child: IconTheme(
-                    data: IconThemeData(
-                      size: metrics.keyFontSize * 1.3,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: DefaultTextStyle(
+                    style: TextStyle(
+                      fontSize: metrics.keyFontSize,
+                      height: 1.0,
                       color: foreground,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.2,
                     ),
-                    child: child,
+                    child: IconTheme(
+                      data: IconThemeData(
+                        size: metrics.keyFontSize * 1.3,
+                        color: foreground,
+                      ),
+                      child: child,
+                    ),
                   ),
                 ),
               ),

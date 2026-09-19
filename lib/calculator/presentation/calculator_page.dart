@@ -14,13 +14,13 @@ import '../../../core/constants/app_constants.dart';
 class CalculatorPage extends StatelessWidget {
   const CalculatorPage({super.key});
 
-  /// Width of the calculator card.  The reference window is 706 px wide, so
+  /// Width of the calculator card. The reference window is 1109 px wide, so
   /// the desktop layout keeps exactly that size while smaller screens shrink
   /// the card to the available width.
-  static const double referenceWindowWidth = 706;
+  static const double referenceWindowWidth = 1109;
 
   /// Horizontal side padding of the reference window (24 px at full size).
-  static const double sidePadding = 24;
+  static const double sidePadding = 25;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,8 @@ class CalculatorPage extends StatelessWidget {
 }
 
 /// Width available to the keypad inside a card of [cardWidth].
-double keypadWidthFor(double cardWidth) => cardWidth -
+double keypadWidthFor(double cardWidth) =>
+    cardWidth -
     2 *
         CalculatorPage.sidePadding *
         (cardWidth / CalculatorPage.referenceWindowWidth);
@@ -90,15 +91,21 @@ class _Window extends StatelessWidget {
       decoration: const BoxDecoration(
         color: CalculatorColors.body,
         boxShadow: <BoxShadow>[
-          BoxShadow(color: Color(0x33000000), blurRadius: 6, offset: Offset(0, 2)),
+          BoxShadow(
+            color: Color(0x33000000),
+            blurRadius: 6,
+            offset: Offset(0, 2),
+          ),
         ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           _TitleBar(metrics: metrics),
+          SizedBox(height: metrics.gap * 1.5),
           Padding(
-            padding: displayPadding + EdgeInsets.only(bottom: metrics.gap * 1.5),
+            padding:
+                displayPadding + EdgeInsets.only(bottom: metrics.gap * 1.5),
             child: CalculatorDisplay(
               expression: state.expressionText,
               result: state.resultText,
@@ -106,9 +113,10 @@ class _Window extends StatelessWidget {
               errorMessage: state.errorMessage,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: metrics.pitch * 0.4),
-            child: CalculatorKeypad(width: keypadWidth, onAction: onAction),
+          CalculatorKeypad(
+            width: keypadWidth,
+            angleMode: state.angleMode,
+            onAction: onAction,
           ),
           SizedBox(height: metrics.gap * 1.5),
         ],
@@ -164,26 +172,6 @@ class _TitleBar extends StatelessWidget {
               ),
             ),
           ),
-          // Decorative window controls from the reference screenshot; they
-          // have no function in a full-screen application.
-          SizedBox(width: metrics.pitch * 0.3),
-          Semantics(
-            excludeSemantics: true,
-            child: Icon(
-              Icons.horizontal_rule,
-              size: metrics.keyFontSize * 1.2,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(width: metrics.pitch * 0.2),
-          Semantics(
-            excludeSemantics: true,
-            child: Icon(
-              Icons.close,
-              size: metrics.keyFontSize * 1.3,
-              color: Colors.white,
-            ),
-          ),
         ],
       ),
     );
@@ -202,8 +190,10 @@ class _HelpDialog extends StatelessWidget {
   const _HelpDialog();
 
   static const List<(String, String)> _facts = <(String, String)>[
-    ('Functions apply after the number',
-        'Type 25 first, then press `sin` - the GATE calculator works postfix.'),
+    (
+      'Functions apply after the number',
+      'Type 25 first, then press sin. This calculator applies functions in postfix order.',
+    ),
     (
       'Two displays',
       'The upper line shows the key sequence you entered, the lower line shows the value.',
@@ -214,21 +204,24 @@ class _HelpDialog extends StatelessWidget {
     ),
     (
       'x^y and y-root',
-      'Enter the base, press `x^y` (or the y-root key), then enter the exponent and press `=`.',
+      'Enter the base, press xʸ (or the y-root key), enter the exponent, then press =.',
     ),
-    ('+/-', 'Sign change works on the current operand, also inside an exponent.'),
+    ('+⁄−', 'Changes the sign of the current operand, including an exponent.'),
     (
       'Memory',
-      '`MS` stores the displayed value, `MR` recalls it, `M+`/`M-` add or subtract, `MC` clears.',
+      'MS stores the displayed value, MR recalls it, M+ and M− add or subtract, and MC clears it.',
     ),
-    ('C and <-', '`C` restarts the whole calculation, `<-` deletes the last digit.'),
+    (
+      'C and ←',
+      'C restarts the calculation. The backspace arrow deletes the last digit.',
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 420, maxHeight: 520),
+        constraints: const BoxConstraints(maxWidth: 460, maxHeight: 600),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -239,7 +232,9 @@ class _HelpDialog extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     'How this calculator works',
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const Spacer(),
                   IconButton(
@@ -254,12 +249,46 @@ class _HelpDialog extends StatelessWidget {
             // Scrollable middle
             Flexible(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
                 children: <Widget>[
+                  Text(
+                    'Enter values, choose an operation, and read the result in the lower display.',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.black87,
+                      height: 1.35,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
                   for (final (String title, String body) in _facts) ...<Widget>[
-                    Text(title, style: Theme.of(context).textTheme.titleSmall),
-                    const SizedBox(height: 2),
-                    Text(body, style: Theme.of(context).textTheme.bodyMedium),
+                    Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Theme.of(context).dividerColor,
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            title,
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(fontWeight: FontWeight.w700),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            body,
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyMedium?.copyWith(height: 1.35),
+                          ),
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: 10),
                   ],
                 ],

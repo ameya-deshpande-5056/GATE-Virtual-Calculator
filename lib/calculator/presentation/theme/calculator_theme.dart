@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 abstract final class CalculatorColors {
   static const Color titleBar = Color(0xFF4286F3);
   static const Color helpButton = Color(0xFF56C0F4);
-  static const Color body = Color(0xFFDADADA);
+  static const Color body = Color(0xFFD3D3D3);
   static const Color displayBackground = Colors.white;
   static const Color displayBorder = Color(0xFFC1C1C1);
   static const Color displayText = Colors.black;
@@ -17,7 +17,7 @@ abstract final class CalculatorColors {
   static const Color keyShadow = Color(0x33000000);
   static const Color keyText = Color(0xFF333333);
 
-  static const Color redKey = Color(0xFFE84C3D);
+  static const Color redKey = Color(0xFFEB493D);
   static const Color greenKey = Color(0xFF2DCC70);
 
   static const Color radioSelected = Color(0xFF1E88E5);
@@ -52,17 +52,17 @@ class CalculatorMetrics {
     required this.modeRowHeight,
   });
 
-  /// The reference window is 706 px wide with 11 button columns.
-  static const double referenceWindowWidth = 706;
+  /// The reference window is 1109 px wide with 11 button columns.
+  static const double referenceWindowWidth = 1109;
 
-  /// Column pitch in the reference (60 px, 52 px buttons + 8 px gap).
-  static const double referencePitch = 60;
+  /// Column pitch in the reference (96 px, 84 px buttons + 12 px gap).
+  static const double referencePitch = 96;
 
-  /// Button row height in the reference (33 px).
-  static const double referenceRowHeight = 33;
+  /// Button row height in the reference (59 px).
+  static const double referenceRowHeight = 59;
 
-  /// Display box height in the reference (45 px).
-  static const double referenceDisplayHeight = 45;
+  /// Display box height in the reference (70 px).
+  static const double referenceDisplayHeight = 70;
 
   /// The keypad always uses 11 columns.
   static const int columns = 11;
@@ -72,11 +72,11 @@ class CalculatorMetrics {
     final double scale = pitch / referencePitch;
     return CalculatorMetrics(
       pitch: pitch,
-      rowHeight: _clamp(pitch * (referenceRowHeight / referencePitch), 36, 40),
-      keyFontSize: _clamp(15.5 * scale, 9.5, 16),
-      displayHeight: _clamp(45 * scale, 32, 46),
-      displayFontSize: _clamp(30 * scale, 17, 30),
-      modeRowHeight: _clamp(pitch * (referenceRowHeight / referencePitch), 34, 38),
+      rowHeight: _clamp(pitch * (referenceRowHeight / referencePitch), 36, 59),
+      keyFontSize: _clamp(27 * scale, 10, 28),
+      displayHeight: _clamp(70 * scale, 38, 70),
+      displayFontSize: _clamp(42 * scale, 20, 42),
+      modeRowHeight: _clamp(pitch * (referenceRowHeight / referencePitch), 40, 59),
     );
   }
 
