@@ -1,46 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="GATE examination virtual calculator — offline scientific calculator reproduction.">
-
-  <!-- iOS meta tags & icons -->
+  <meta name="description" content="GATE examination virtual calculator - offline scientific calculator reproduction.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="GATE Calculator">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
-
+  <link rel="icon" type="image/png" href="favicon.png">
   <title>GATE Virtual Calculator</title>
   <link rel="manifest" href="manifest.json">
+  <style>
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+    body { margin: 0; background: #0b1220; }
+    #loading-screen { align-items: center; background: radial-gradient(circle at 50% 34%, rgba(66, 134, 243, .24), transparent 34%), linear-gradient(145deg, #0b1220, #101d35); color: #f5f8ff; display: flex; inset: 0; justify-content: center; min-height: 100vh; position: fixed; z-index: 9999; }
+    .loading-content { align-items: center; display: flex; flex-direction: column; gap: 18px; text-align: center; }
+    .loading-mark { align-items: center; background: linear-gradient(145deg, #4286f3, #56c0f4); border-radius: 22px; box-shadow: 0 18px 44px rgba(66, 134, 243, .3); display: flex; height: 78px; justify-content: center; overflow: hidden; width: 78px; }
+    .loading-mark img { height: 100%; object-fit: cover; width: 100%; }
+    .loading-title { font-size: 22px; font-weight: 700; letter-spacing: .2px; }
+    .loading-caption { color: #aebdd7; font-size: 13px; margin-top: -10px; }
+    .loading-track { background: rgba(255, 255, 255, .14); border-radius: 99px; height: 4px; overflow: hidden; width: 150px; }
+    .loading-progress { animation: loading-progress 1.4s ease-in-out infinite; background: #56c0f4; border-radius: inherit; height: 100%; transform-origin: left; width: 45%; }
+    @keyframes loading-progress { 0% { transform: translateX(-110%) scaleX(.7); } 50% { transform: translateX(75%) scaleX(1.1); } 100% { transform: translateX(260%) scaleX(.7); } }
+    @media (prefers-reduced-motion: reduce) { .loading-progress { animation: none; margin-left: 55%; } }
+  </style>
 </head>
 <body>
-  <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
-
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
-  -->
+  <div id="loading-screen" role="status" aria-label="Loading GATE Virtual Calculator">
+    <div class="loading-content">
+      <div class="loading-mark" aria-hidden="true"><img src="favicon.png" alt=""></div>
+      <div class="loading-title">GATE Virtual Calculator</div>
+      <div class="loading-caption">Preparing your calculator</div>
+      <div class="loading-track" aria-hidden="true"><div class="loading-progress"></div></div>
+    </div>
+  </div>
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      var screen = document.getElementById('loading-screen');
+      if (screen) screen.remove();
+    });
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
