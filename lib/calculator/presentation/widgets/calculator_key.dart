@@ -55,13 +55,6 @@ class CalculatorKey extends StatelessWidget {
                 color: face,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: CalculatorColors.keyBorder),
-                boxShadow: const <BoxShadow>[
-                  BoxShadow(
-                    color: CalculatorColors.keyShadow,
-                    offset: Offset(0, 5),
-                    blurRadius: 0,
-                  ),
-                ],
               ),
               child: Center(
                 child: FittedBox(
@@ -92,7 +85,7 @@ class CalculatorKey extends StatelessWidget {
   }
 }
 
-/// 1 px grey border with the reference calculator's 4 px corner radius.
+/// 1 px grey border with the calculator key corner radius.
 class _KeyBorder extends ShapeBorder {
   @override
   EdgeInsetsGeometry get dimensions => const EdgeInsets.all(1);
@@ -102,7 +95,7 @@ class _KeyBorder extends ShapeBorder {
     final Rect inset = rect.deflate(0.5);
     return Path()
       ..addRRect(
-        RRect.fromRectAndRadius(inset, const Radius.circular(4)),
+        RRect.fromRectAndRadius(inset, const Radius.circular(8)),
       );
   }
 
